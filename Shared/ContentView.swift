@@ -6,11 +6,25 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
+    @ObservedObject private var viewModel = CombineViewModel()
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        
+        NavigationView{
+            List(viewModel.comments) { comment in
+                Text(comment.body).font(.title)
+            }
+            .navigationBarItems(trailing: Button(action: {
+                viewModel.isDarkMode.toggle()
+            }, label: {
+                Text(viewModel.isDarkMode ? "Light": "Dark")
+            }))
+            .navigationBarTitle("Comments")
+            .environment(\.colorScheme, viewModel.isDarkMode ? .dark :.light)
+        }
+        
     }
 }
 
